@@ -1,10 +1,11 @@
 {
   "name": "express-recap",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Express app connecting to Kafka, Elasticsearch, Redis, and PostgreSQL",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
   "repository": {
     "type": "git",
@@ -17,5 +18,18 @@
   "bugs": {
     "url": "https://github.com/hadimojak/express-recap/issues"
   },
-  "homepage": "https://github.com/hadimojak/express-recap#readme"
+  "homepage": "https://github.com/hadimojak/express-recap#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "kafkajs": "^2.2.4",
+    "@elastic/elasticsearch": "^8.11.0",
+    "redis": "^4.6.12",
+    "sequelize": "^6.35.2",
+    "pg": "^8.11.3",
+    "pg-hstore": "^2.3.4",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
 }

@@ -65,8 +65,42 @@ services:
       timeout: 10s
       retries: 5
 
+  redis2:
+    image: redis:7-alpine
+    container_name: redis2
+    ports:
+      - "6380:6379"
+    command: redis-server --requirepass e17991d3e55363f64791e5481e848cd9
+    volumes:
+      - redis2_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "e17991d3e55363f64791e5481e848cd9", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres
+    ports:
+      - "26257:5432"
+    environment:
+      - POSTGRES_USER=sgmnt_master
+      - POSTGRES_PASSWORD=uEaAMLzn6fZ2EkRc
+      - POSTGRES_DB=sgmnt_ref_core
+    command: postgres -c ssl=off
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sgmnt_master"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
 volumes:
   kafka_data:
   elasticsearch_data:
   redis_data:
+  redis2_data:
+  postgres_data:
 
