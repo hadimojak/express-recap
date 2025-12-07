@@ -7,7 +7,7 @@ const sequelize = new Sequelize({
   username: process.env.DB_USER || "sgmnt_master",
   password: process.env.DB_PASSWORD || "uEaAMLzn6fZ2EkRc",
   database: process.env.DB_NAME || "sgmnt_ref_core",
-  logging: process.env.NODE_ENV === "development" ? console.log : false,
+  logging: false,
   dialectOptions: {
     ssl: process.env.DB_SSL === "true",
   },

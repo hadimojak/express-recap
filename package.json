@@ -5,7 +5,9 @@
   "main": "app.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "docker": "sudo docker compose down -v && sudo docker compose up -d && sleep 30 && curl -X POST 'http://localhost:9200/_security/user/kibana_system/_password' -u elastic:mojak2525 -H 'Content-Type: application/json' -d '{\"password\":\"mojak2525\"}' && sudo docker compose restart kibana",
+    "docker:keep-data": "sudo docker compose down && sudo docker compose up -d && sleep 30 && sudo docker compose restart kibana"
   },
   "repository": {
     "type": "git",
