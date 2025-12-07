@@ -1,30 +1,30 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const sequelize = require('../config/database');
+const sequelize = require("../config/database");
 
-router.post('/query', async (req, res) => {
+router.post("/query", async (req, res) => {
   try {
     const { query, replacements } = req.body;
-    
+
     if (!query) {
-      return res.status(400).json({ error: 'Query is required' });
+      return res.status(400).json({ error: "Query is required" });
     }
 
     const [results, metadata] = await sequelize.query(query, {
-      replacements: replacements || []
+      replacements: replacements || [],
     });
-    
-    res.json({ 
-      success: true, 
-      rows: results, 
-      rowCount: metadata.rowCount || results.length 
+
+    res.json({
+      success: true,
+      rows: results,
+      rowCount: metadata.rowCount || results.length,
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
-router.get('/tables', async (req, res) => {
+router.get("/tables", async (req, res) => {
   try {
     const [results] = await sequelize.query(`
       SELECT table_name 
@@ -38,4 +38,3 @@ router.get('/tables', async (req, res) => {
 });
 
 module.exports = router;
-
