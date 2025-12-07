@@ -1,6 +1,9 @@
 // Load environment variables first
 import "dotenv/config";
 
+// Initialize OpenTelemetry BEFORE importing app
+import "./instrumentation.js";
+
 import app from "./app.js";
 import {
   producer,
