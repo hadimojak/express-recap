@@ -1,6 +1,6 @@
-const { Kafka } = require("kafkajs");
-const { Client: ElasticsearchClient } = require("@elastic/elasticsearch");
-const redis = require("redis");
+import { Kafka } from "kafkajs";
+import { Client as ElasticsearchClient } from "@elastic/elasticsearch";
+import redis from "redis";
 
 // ==================== KAFKA CONNECTION ====================
 const kafka = new Kafka({
@@ -47,7 +47,7 @@ const redis2Client = redis.createClient({
   ...(process.env.REDIS2_PASSWORD && { password: process.env.REDIS2_PASSWORD }),
 });
 
-module.exports = {
+export {
   kafka,
   producer,
   consumer,

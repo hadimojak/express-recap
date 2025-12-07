@@ -1,7 +1,7 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const { kafka, elasticsearchClient, redisClient, redis2Client } = require('../services');
-const sequelize = require('../config/database');
+import { kafka, elasticsearchClient, redisClient, redis2Client } from '../services/index.js';
+import sequelize from '../config/database.js';
 
 router.get('/', async (req, res) => {
   const health = {
@@ -58,5 +58,5 @@ router.get('/', async (req, res) => {
   res.json(health);
 });
 
-module.exports = router;
+export default router;
 

@@ -1,6 +1,6 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const { elasticsearchClient } = require('../services');
+import { elasticsearchClient } from '../services/index.js';
 
 router.post('/index', async (req, res) => {
   try {
@@ -37,5 +37,5 @@ router.get('/search/:index', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;
 

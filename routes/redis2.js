@@ -1,6 +1,6 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const { redis2Client } = require('../services');
+import { redis2Client } from '../services/index.js';
 
 router.post('/set', async (req, res) => {
   try {
@@ -32,5 +32,5 @@ router.get('/get/:key', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;
 

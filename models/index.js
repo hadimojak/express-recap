@@ -1,8 +1,8 @@
 // Import all models here
-const User = require('./User');
+import User from './User.js';
 
 // Export all models
-module.exports = {
+export {
   User
 };
 

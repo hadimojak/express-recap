@@ -1,6 +1,6 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
-const sequelize = require("../config/database");
+import sequelize from "../config/database.js";
 
 router.post("/query", async (req, res) => {
   try {
@@ -37,4 +37,5 @@ router.get("/tables", async (req, res) => {
   }
 });
 
-module.exports = router;
+
+export default router;

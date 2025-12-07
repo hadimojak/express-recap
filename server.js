@@ -1,15 +1,15 @@
 // Load environment variables first
-require("dotenv").config();
+import "dotenv/config";
 
-const app = require("./app");
-const {
+import app from "./app.js";
+import {
   producer,
   consumer,
   redisClient,
   redis2Client,
   elasticsearchClient,
-} = require("./services");
-const sequelize = require("./config/database");
+} from "./services/index.js";
+import sequelize from "./config/database.js";
 
 const PORT = process.env.PORT || 3000;
 
@@ -34,6 +34,7 @@ async function initializeConnections() {
     // Test PostgreSQL connection
     await sequelize.authenticate({});
     console.log("✅ PostgreSQL connected via Sequelize");
+
 
     // Test Elasticsearch connection
     const esHealth = await elasticsearchClient.cluster.health();

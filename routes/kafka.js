@@ -1,6 +1,6 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const { producer, consumer } = require('../services');
+import { producer, consumer } from '../services/index.js';
 
 router.post('/produce', async (req, res) => {
   try {
@@ -52,5 +52,5 @@ router.post('/consume', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;
 

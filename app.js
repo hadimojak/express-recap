@@ -1,13 +1,13 @@
-const express = require("express");
+import express from "express";
 
 // Import routes
-const indexRoutes = require("./routes/index");
-const healthRoutes = require("./routes/health");
-const kafkaRoutes = require("./routes/kafka");
-const elasticsearchRoutes = require("./routes/elasticsearch");
-const redisRoutes = require("./routes/redis");
-const redis2Routes = require("./routes/redis2");
-const postgresRoutes = require("./routes/postgres");
+import indexRoutes from "./routes/index.js";
+import healthRoutes from "./routes/health.js";
+import kafkaRoutes from "./routes/kafka.js";
+import elasticsearchRoutes from "./routes/elasticsearch.js";
+import redisRoutes from "./routes/redis.js";
+import redis2Routes from "./routes/redis2.js";
+import postgresRoutes from "./routes/postgres.js";
 
 const app = express();
 app.use(express.json());
@@ -21,4 +21,4 @@ app.use("/redis", redisRoutes);
 app.use("/redis2", redis2Routes);
 app.use("/postgres", postgresRoutes);
 
-module.exports = app;
+export default app;
