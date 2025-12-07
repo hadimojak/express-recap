@@ -10,7 +10,6 @@ import {
   elasticsearchClient,
 } from "./services/index.js";
 import sequelize from "./config/database.js";
-import User from "./models/User.js";
 
 const PORT = process.env.PORT || 3000;
 
@@ -34,11 +33,8 @@ async function initializeConnections() {
 
     // Test PostgreSQL connection
     await sequelize.authenticate({});
+    await sequelize.sync({ alter: true });
     console.log("✅ PostgreSQL connected via Sequelize");
-
-    await User.sync({ alter:true});
-    console.log("✅ User table created");
-
 
     // Test Elasticsearch connection
     const esHealth = await elasticsearchClient.cluster.health();
