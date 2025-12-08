@@ -1,41 +1,98 @@
-import { NodeSDK } from "@opentelemetry/sdk-node";
-import { getNodeAutoInstrumentations } from "@opentelemetry/auto-instrumentations-node";
-import { JaegerExporter } from "@opentelemetry/exporter-jaeger";
-import { OTLPTraceExporter } from "@opentelemetry/exporter-otlp-http";
-import { Resource } from "@opentelemetry/resources";
-import { SEMRESATTRS_SERVICE_NAME, SEMRESATTRS_SERVICE_VERSION } from "@opentelemetry/semantic-conventions";
+import "@opentelemetry/api-logs";
+import loggerProvider from "./logger/logger.js";
 
-// Initialize OpenTelemetry SDK
-const sdk = new NodeSDK({
-  resource: new Resource({
-    [SEMRESATTRS_SERVICE_NAME]: process.env.OTEL_SERVICE_NAME || "express-recap",
-    [SEMRESATTRS_SERVICE_VERSION]: process.env.OTEL_SERVICE_VERSION || "1.0.0",
-  }),
-  traceExporter: process.env.OTEL_EXPORTER_OTLP_ENDPOINT
-    ? new OTLPTraceExporter({
-        url: process.env.OTEL_EXPORTER_OTLP_ENDPOINT,
-        headers: process.env.OTEL_EXPORTER_OTLP_HEADERS
-          ? JSON.parse(process.env.OTEL_EXPORTER_OTLP_HEADERS)
-          : {},
-      })
-    : new JaegerExporter({
-        endpoint: process.env.JAEGER_ENDPOINT || "http://localhost:14268/api/traces",
-      }),
-  instrumentations: [getNodeAutoInstrumentations()],
-});
+// Get a logger instance
+const logger = loggerProvider.getLogger("default", "1.0.0");
 
-sdk.start();
+// Store original console methods
+const originalConsole = {
+  log: console.log,
+  info: console.info,
+  warn: console.warn,
+  error: console.error,
+  debug: console.debug,
+};
 
-console.log("✅ OpenTelemetry SDK initialized");
+// Map severity levels
+const SeverityNumber = {
+  DEBUG: 5,
+  INFO: 9,
+  WARN: 13,
+  ERROR: 17,
+};
 
-// Graceful shutdown
-process.on("SIGTERM", () => {
-  sdk
-    .shutdown()
-    .then(() => console.log("OpenTelemetry terminated"))
-    .catch((error) => console.error("Error terminating OpenTelemetry", error))
-    .finally(() => process.exit(0));
-});
+// Override console methods
+console.log = function (...args) {
+  const message = args
+    .map((arg) => (typeof arg === "object" ? JSON.stringify(arg) : String(arg)))
+    .join(" ");
 
-export default sdk;
+  logger.emit({
+    severityNumber: SeverityNumber.INFO,
+    severityText: "INFO",
+    body: message,
+    attributes: {},
+  });
 
+  originalConsole.log.apply(console, args);
+};
+
+console.info = function (...args) {
+  const message = args
+    .map((arg) => (typeof arg === "object" ? JSON.stringify(arg) : String(arg)))
+    .join(" ");
+
+  logger.emit({
+    severityNumber: SeverityNumber.INFO,
+    severityText: "INFO",
+    body: message,
+    attributes: {},
+  });
+
+  originalConsole.info.apply(console, args);
+};
+
+console.warn = function (...args) {
+  const message = args
+    .map((arg) => (typeof arg === "object" ? JSON.stringify(arg) : String(arg)))
+    .join(" ");
+
+  logger.emit({
+    severityNumber: SeverityNumber.WARN,
+    severityText: "WARN",
+    body: message,
+    attributes: {},
+  });
+
+  originalConsole.warn.apply(console, args);
+};
+
+console.error = function (...args) {
+  const message = args
+    .map((arg) => (typeof arg === "object" ? JSON.stringify(arg) : String(arg)))
+    .join(" ");
+
+  logger.emit({
+    severityNumber: SeverityNumber.ERROR,
+    severityText: "ERROR",
+    body: message,
+    attributes: {},
+  });
+
+  originalConsole.error.apply(console, args);
+};
+
+console.debug = function (...args) {
+  const message = args
+    .map((arg) => (typeof arg === "object" ? JSON.stringify(arg) : String(arg)))
+    .join(" ");
+
+  logger.emit({
+    severityNumber: SeverityNumber.DEBUG,
+    severityText: "DEBUG",
+    body: message,
+    attributes: {},
+  });
+
+  originalConsole.debug.apply(console, args);
+};

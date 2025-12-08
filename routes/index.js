@@ -6,10 +6,10 @@ router.get('/', (req, res) => {
     message: 'Express app connected to all services',
     endpoints: {
       health: '/health',
-      kafka: {
-        produce: 'POST /kafka/produce',
-        consume: 'POST /kafka/consume'
-      },
+      // kafka: {
+      //   produce: 'POST /kafka/produce',
+      //   consume: 'POST /kafka/consume'
+      // },
       elasticsearch: {
         index: 'POST /elasticsearch/index',
         search: 'GET /elasticsearch/search/:index'

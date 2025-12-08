@@ -1,6 +1,7 @@
 import express from 'express';
 const router = express.Router();
-import { kafka, elasticsearchClient, redisClient, redis2Client } from '../services/index.js';
+// import { kafka, elasticsearchClient, redisClient, redis2Client } from '../services/index.js';
+import { elasticsearchClient, redisClient, redis2Client } from '../services/index.js';
 import sequelize from '../config/database.js';
 
 router.get('/', async (req, res) => {
@@ -11,14 +12,14 @@ router.get('/', async (req, res) => {
   };
 
   // Check Kafka
-  try {
-    const admin = kafka.admin();
-    await admin.connect();
-    await admin.disconnect();
-    health.services.kafka = { status: 'connected' };
-  } catch (error) {
-    health.services.kafka = { status: 'error', error: error.message };
-  }
+  // try {
+  //   const admin = kafka.admin();
+  //   await admin.connect();
+  //   await admin.disconnect();
+  //   health.services.kafka = { status: 'connected' };
+  // } catch (error) {
+  //   health.services.kafka = { status: 'error', error: error.message };
+  // }
 
   // Check Elasticsearch
   try {
