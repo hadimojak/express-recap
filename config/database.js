@@ -8,10 +8,11 @@ const sequelize = new Sequelize({
   password: process.env.DB_PASSWORD || "uEaAMLzn6fZ2EkRc",
   database: process.env.DB_NAME || "sgmnt_ref_core",
   logging: false,
+  timezone: "+03:30", // Tehran timezone
   dialectOptions: {
     ssl: process.env.DB_SSL === "true",
   },
-    sync: { force: true } ,
+  sync: { alter: true },
 });
 
 export default sequelize;

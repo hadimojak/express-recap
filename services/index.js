@@ -1,17 +1,17 @@
-// import { Kafka } from "kafkajs";
+import { Kafka } from "kafkajs";
 import { Client as ElasticsearchClient } from "@elastic/elasticsearch";
 import redis from "redis";
 
 // ==================== KAFKA CONNECTION ====================
-// const kafka = new Kafka({
-//   clientId: process.env.KAFKA_CLIENT_ID || "express-app",
-//   brokers: (process.env.KAFKA_BROKERS || "localhost:9094").split(","),
-// });
+const kafka = new Kafka({
+  clientId: process.env.KAFKA_CLIENT_ID || "express-app",
+  brokers: (process.env.KAFKA_BROKERS || "localhost:9094").split(","),
+});
 
-// const producer = kafka.producer();
-// const consumer = kafka.consumer({
-//   groupId: process.env.KAFKA_CONSUMER_GROUP_ID || "express-group",
-// });
+const producer = kafka.producer();
+const consumer = kafka.consumer({
+  groupId: process.env.KAFKA_CONSUMER_GROUP_ID || "express-group",
+});
 
 // ==================== ELASTICSEARCH CONNECTION ====================
 const elasticsearchConfig = {
@@ -48,9 +48,9 @@ const redis2Client = redis.createClient({
 });
 
 export {
-  // kafka,
-  // producer,
-  // consumer,
+  kafka,
+  producer,
+  consumer,
   elasticsearchClient,
   redisClient,
   redis2Client,

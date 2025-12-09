@@ -1,14 +1,15 @@
-import {
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+const {
   LoggerProvider,
   BatchLogRecordProcessor,
-} from "@opentelemetry/sdk-logs";
-import { OTLPLogExporter } from "@opentelemetry/exporter-logs-otlp-http";
-import { Resource } from "@opentelemetry/resources";
-import { ATTR_SERVICE_NAME } from "@opentelemetry/semantic-conventions";
+} = require("@opentelemetry/sdk-logs/build/src/index.js");
+const { OTLPLogExporter } = require("@opentelemetry/exporter-logs-otlp-http");
+const { Resource } = require("@opentelemetry/resources");
 
 // Create a resource with your service information
 const resource = new Resource({
-  [ATTR_SERVICE_NAME]: process.env.OTEL_SERVICE_NAME || "nodejs-console-app",
+  "service.name": process.env.OTEL_SERVICE_NAME || "express-recap",
 });
 
 // Configure the OTLP exporter
@@ -18,7 +19,7 @@ const logExporter = new OTLPLogExporter({});
 // Create and configure the logger provider
 const loggerProvider = new LoggerProvider({
   resource,
-  processors: [new BatchLogRecordProcessor(logExporter)], // Configure batch processor
+  processors: [new BatchLogRecordProcessor(logExporter)],
 });
 
 export default loggerProvider;

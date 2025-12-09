@@ -17,7 +17,6 @@ const User = sequelize.define(
     email: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
       validate: {
         isEmail: true,
       },
@@ -33,7 +32,7 @@ const User = sequelize.define(
   },
   {
     tableName: "users",
-    timestamps: true,
+    timestamps: false, // We handle timestamps manually with Tehran timezone
   }
 );
 
