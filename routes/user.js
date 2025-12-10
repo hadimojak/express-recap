@@ -15,6 +15,7 @@ router.post("/create", requestId, createUserValidator, async (req, res) => {
       requestId: req.requestId,
       body: req.body,
     });
+    otel.debug('creating new user')
 
     // Check for validation errors
     const errors = validationResult(req);
@@ -41,6 +42,12 @@ router.post("/create", requestId, createUserValidator, async (req, res) => {
       updatedAt: tehranTime,
     });
 
+    otel.logWithBody("User created - Response sent", {
+      requestId: req.requestId,
+      status: 201,
+      response,
+    });
+
     const response = {
       success: true,
       message: "User created successfully",
@@ -52,6 +59,9 @@ router.post("/create", requestId, createUserValidator, async (req, res) => {
       requestId: req.requestId,
       status: 201,
       response,
+    }); 
+    
+    otel.info("User created - Response sent wiht logggggggg", {
     });
 
     return res.status(201).json(response);

@@ -4,9 +4,11 @@ process.env.TZ = "Asia/Tehran";
 // Load environment variables first
 import "dotenv/config";
 // Initialize console instrumentation BEFORE anything else
+import "./tracing.js";
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
 require("./console-instrumentation.js");
+
 
 import app from "./app.js";
 import {

@@ -22,4 +22,4 @@ const loggerProvider = new LoggerProvider({
   processors: [new BatchLogRecordProcessor(logExporter)],
 });
 
-export default loggerProvider;
+export { loggerProvider };
