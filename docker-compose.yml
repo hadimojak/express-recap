@@ -32,58 +32,6 @@ services:
     environment:
       KAFKA_CLUSTERS_0_NAME: local
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
-
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.0
-    container_name: elasticsearch
-    ports:
-      - "9200:9200"
-      - "9300:9300"
-    environment:
-      - discovery.type=single-node
-      - xpack.security.enabled=true
-      - ELASTIC_PASSWORD=mojak2525
-      - KIBANA_SYSTEM_PASSWORD=mojak2525
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-    volumes:
-      - elasticsearch_data:/usr/share/elasticsearch/data
-    healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          "curl -f -u elastic:mojak2525 http://localhost:9200/_cluster/health || exit 1",
-        ]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-
-  kibana:
-    image: docker.elastic.co/kibana/kibana:8.11.0
-    container_name: kibana
-    ports:
-      - "5601:5601"
-    environment:
-      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
-      - ELASTICSEARCH_USERNAME=kibana_system
-      - ELASTICSEARCH_PASSWORD=mojak2525
-      - ELASTICSEARCH_SSL_VERIFICATIONMODE=none
-      - SERVERNAME=kibana
-      - SERVER_HOST=0.0.0.0
-      - XPACK_SECURITY_ENABLED=true
-      - XPACK_ENCRYPTEDSAVEDOBJECTS_ENCRYPTIONKEY=min32charlongencryptionkeyhere123456
-      - XPACK_REPORTING_KIBANASERVER_HOSTNAME=localhost
-      - XPACK_APM_ENABLED=false
-      - XPACK_SCREENSHOTTING_BROWSER_CHROMIUM_DISABLESANDBOX=true
-    depends_on:
-      elasticsearch:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:5601/api/status || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 10
-      start_period: 60s
-
  
   redis:
     image: redis:7-alpine
@@ -94,21 +42,6 @@ services:
       - redis_data:/data
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-
-  redis2:
-    image: redis:7-alpine
-    container_name: redis2
-    ports:
-      - "6380:6379"
-    command: redis-server --requirepass e17991d3e55363f64791e5481e848cd9
-    volumes:
-      - redis2_data:/data
-    healthcheck:
-      test:
-        ["CMD", "redis-cli", "-a", "e17991d3e55363f64791e5481e848cd9", "ping"]
       interval: 30s
       timeout: 10s
       retries: 5
@@ -133,7 +66,5 @@ services:
 
 volumes:
   kafka_data:
-  elasticsearch_data:
   redis_data:
-  redis2_data:
   postgres_data:

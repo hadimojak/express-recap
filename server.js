@@ -1,8 +1,14 @@
 // Set timezone to Iran/Tehran
 process.env.TZ = "Asia/Tehran";
-import { createRequire } from "module";
-const require = createRequire(import.meta.url);
+
+// Load environment variables FIRST
 import "dotenv/config";
+
+// Initialize Sentry BEFORE importing app
+import "./sentry.js";
+
+// import { createRequire } from "module";
+// const require = createRequire(import.meta.url);
 
 
 // Initialize console instrumentation BEFORE anything else
