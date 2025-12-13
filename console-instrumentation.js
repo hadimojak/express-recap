@@ -45,12 +45,12 @@ const otel = {
 
     otelLogger.emit({
       severityNumber: SeverityNumber.INFO,
-      severityText: 'INFO',
+      severityText: "INFO",
       body: message,
-      attributes: {}
+      attributes: {},
     });
   },
-  
+
   logWithBody: function (...args) {
     const message = args
       .map((arg) => (typeof arg === "object" ? JSON.stringify(arg) : String(arg)))
@@ -58,9 +58,9 @@ const otel = {
 
     otelLogger.emit({
       severityNumber: SeverityNumber.INFO3,
-      severityText: 'INFO3',
+      severityText: "INFO3",
       body: message,
-      attributes: {}
+      attributes: {},
     });
   },
 
@@ -118,6 +118,6 @@ const otel = {
 };
 
 // Make otel available globally
-globalThis.otel = otel;
+// globalThis.otel = otel;
 
 export default otel;

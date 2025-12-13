@@ -5,7 +5,7 @@
 // router.post('/produce', async (req, res) => {
 //   try {
 //     const { topic, message } = req.body;
-    
+
 //     if (!topic || !message) {
 //       return res.status(400).json({ error: 'Topic and message are required' });
 //     }
@@ -24,13 +24,13 @@
 // router.post('/consume', async (req, res) => {
 //   try {
 //     const { topic } = req.body;
-    
+
 //     if (!topic) {
 //       return res.status(400).json({ error: 'Topic is required' });
 //     }
 
 //     await consumer.subscribe({ topic, fromBeginning: false });
-    
+
 //     const messages = [];
 //     await consumer.run({
 //       eachMessage: async ({ topic, partition, message }) => {

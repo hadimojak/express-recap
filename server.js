@@ -1,13 +1,14 @@
 // Set timezone to Iran/Tehran
 process.env.TZ = "Asia/Tehran";
-
-// Load environment variables first
-import "dotenv/config";
-// Initialize console instrumentation BEFORE anything else
-import "./tracing.js";
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
-require("./console-instrumentation.js");
+import "dotenv/config";
+
+
+// Initialize console instrumentation BEFORE anything else
+// import "./tracing.js";
+
+// require("./console-instrumentation.js");
 
 
 import app from "./app.js";
@@ -63,22 +64,22 @@ app.listen(PORT, async () => {
 });
 
 // ==================== GRACEFUL SHUTDOWN ====================
-// process.on("SIGTERM", async () => {
-//   console.log("SIGTERM received, shutting down gracefully...");
-//   await producer.disconnect();
-//   await consumer.disconnect();
-//   await redisClient.quit();
-//   await redis2Client.quit();
-//   await sequelize.close();
-//   process.exit(0);
-// });
+process.on("SIGTERM", async () => {
+  console.log("SIGTERM received, shutting down gracefully...");
+  await producer.disconnect();
+  await consumer.disconnect();
+  await redisClient.quit();
+  await redis2Client.quit();
+  await sequelize.close();
+  process.exit(0);
+});
 
-// process.on("SIGINT", async () => {
-//   console.log("SIGINT received, shutting down gracefully...");
-//   await producer.disconnect();
-//   await consumer.disconnect();
-//   await redisClient.quit();
-//   await redis2Client.quit();
-//   await sequelize.close();
-//   process.exit(0);
-// });
+process.on("SIGINT", async () => {
+  console.log("SIGINT received, shutting down gracefully...");
+  await producer.disconnect();
+  await consumer.disconnect();
+  await redisClient.quit();
+  await redis2Client.quit();
+  await sequelize.close();
+  process.exit(0);
+});

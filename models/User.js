@@ -9,7 +9,7 @@ const User = sequelize.define(
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
-    },  
+    },
     name: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -33,7 +33,7 @@ const User = sequelize.define(
   {
     tableName: "users",
     timestamps: false, // We handle timestamps manually with Tehran timezone
-  }
+  },
 );
 
 export default User;

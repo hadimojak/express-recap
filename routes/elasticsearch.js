@@ -1,18 +1,18 @@
-import express from 'express';
+import express from "express";
 const router = express.Router();
-import { elasticsearchClient } from '../services/index.js';
+import { elasticsearchClient } from "../services/index.js";
 
-router.post('/index', async (req, res) => {
+router.post("/index", async (req, res) => {
   try {
     const { index, document } = req.body;
-    
+
     if (!index || !document) {
-      return res.status(400).json({ error: 'Index and document are required' });
+      return res.status(400).json({ error: "Index and document are required" });
     }
 
     const result = await elasticsearchClient.index({
       index,
-      document
+      document,
     });
 
     res.json({ success: true, result });
@@ -21,14 +21,14 @@ router.post('/index', async (req, res) => {
   }
 });
 
-router.get('/search/:index', async (req, res) => {
+router.get("/search/:index", async (req, res) => {
   try {
     const { index } = req.params;
     const { q } = req.query;
 
     const result = await elasticsearchClient.search({
       index,
-      query: q ? { match: { _all: q } } : { match_all: {} }
+      query: q ? { match: { _all: q } } : { match_all: {} },
     });
 
     res.json({ success: true, result: result.hits });

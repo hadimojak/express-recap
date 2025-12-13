@@ -11,11 +11,6 @@ router.post("/create", requestId, createUserValidator, async (req, res) => {
     // Tehran is UTC+3:30 (3.5 hours)
     const tehranTime = new Date(Date.now() + 3.5 * 60 * 60 * 1000);
 
-    otel.info("POST /user/create - Request received", {
-      requestId: req.requestId,
-      body: req.body,
-    });
-    otel.debug('creating new user')
 
     // Check for validation errors
     const errors = validationResult(req);
@@ -24,11 +19,6 @@ router.post("/create", requestId, createUserValidator, async (req, res) => {
         success: false,
         errors: errors.array(),
       };
-      otel.warn("Validation failed - Response sent", {
-        requestId: req.requestId,
-        status: 400,
-        response,
-      });
       return res.status(400).json(response);
     }
 
@@ -42,11 +32,6 @@ router.post("/create", requestId, createUserValidator, async (req, res) => {
       updatedAt: tehranTime,
     });
 
-    otel.logWithBody("User created - Response sent", {
-      requestId: req.requestId,
-      status: 201,
-      response,
-    });
 
     const response = {
       success: true,
@@ -55,41 +40,13 @@ router.post("/create", requestId, createUserValidator, async (req, res) => {
       user,
     };
 
-    otel.log("User created - Response sent", {
-      requestId: req.requestId,
-      status: 201,
-      response,
-    }); 
-    
-    otel.info("User created - Response sent wiht logggggggg", {
-    });
 
     return res.status(201).json(response);
   } catch (error) {
-    otel.error("Error creating user", {
-      requestId: req.requestId,
-      error: error.message,
-      stack: error.stack,
-    });
 
-    // Handle unique constraint violation
-    if (error.name === "SequelizeUniqueConstraintError") {
-      const response = { success: false, error: "Email already exists" };
-      otel.warn("Conflict - Response sent", {
-        requestId: req.requestId,
-        status: 409,
-        response,
-      });
-      return res.status(409).json(response);
-    }
 
-    const response = { success: false, error: error.message };
-    otel.error("Server error - Response sent", {
-      requestId: req.requestId,
-      status: 500,
-      response,
-    });
-    res.status(500).json(response);
+    // Handle unique constraint violatio
+    res.status(500).json(error);
   }
 });
 

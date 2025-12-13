@@ -63,14 +63,14 @@ function extractOutgoingContext(res, data, responseTime, startTime) {
       statusCategory: statusCategory,
       statusCodeGroup: `${Math.floor(statusCode / 100)}xx`,
     },
-    
+
     // Response Headers
     headers: res.getHeaders ? res.getHeaders() : {},
-    
+
     // Response Body
     body: sanitizeResponse(data),
     rawBody: data, // Keep original for reference
-    
+
     // Timing Information
     timing: {
       startTime: new Date(startTime).toISOString(),
@@ -78,12 +78,12 @@ function extractOutgoingContext(res, data, responseTime, startTime) {
       responseTime: `${responseTime}ms`,
       responseTimeMs: responseTime,
     },
-    
+
     // Response Metadata
     success: statusCode >= 200 && statusCode < 400,
     error: statusCode >= 400 ? (data?.error || data?.message || statusMessage) : null,
     hasError: statusCode >= 400,
-    
+
     // Additional Response Info
     contentType: res.get ? res.get("content-type") : undefined,
     contentLength: res.get ? res.get("content-length") : undefined,
@@ -95,7 +95,7 @@ function extractOutgoingContext(res, data, responseTime, startTime) {
  * @param {string} indexName - Elasticsearch index name
  */
 export const elasticsearchLogger = (indexName = "user") => {
-  return async (req, res, next) => {
+  return  (req, res, next) => {
     const startTime = Date.now();
     const { requestId } = req;
 
@@ -108,7 +108,7 @@ export const elasticsearchLogger = (indexName = "user") => {
     // Override res.json to capture response
     res.json = function (data) {
       const responseTime = Date.now() - startTime;
-      
+
       // Capture all response data in one field
       const response = extractOutgoingContext(res, data, responseTime, startTime);
 
@@ -117,13 +117,13 @@ export const elasticsearchLogger = (indexName = "user") => {
         // General context
         requestId,
         timestamp: new Date().toISOString(),
-        
+
         // Incoming API context
         incoming: incomingContext,
-        
+
         // All response data in one field as JSON object (for querying)
         responseData: response,
-        
+
         // All response data as JSON string (for viewing in Kibana UI)
         responseDataJson: JSON.stringify(response, null, 2),
       };
