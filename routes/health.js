@@ -1,7 +1,6 @@
 import express from "express";
 const router = express.Router();
-// import { kafka, elasticsearchClient, redisClient, redis2Client } from '../services/index.js';
-import { elasticsearchClient, redisClient, redis2Client } from "../services/index.js";
+import { kafka, redisClient  } from "../services/index.js";
 import sequelize from "../config/database.js";
 
 router.get("/", async (req, res) => {
@@ -12,22 +11,15 @@ router.get("/", async (req, res) => {
   };
 
   // Check Kafka
-  // try {
-  //   const admin = kafka.admin();
-  //   await admin.connect();
-  //   await admin.disconnect();
-  //   health.services.kafka = { status: 'connected' };
-  // } catch (error) {
-  //   health.services.kafka = { status: 'error', error: error.message };
-  // }
-
-  // Check Elasticsearch
   try {
-    const esHealth = await elasticsearchClient.cluster.health();
-    health.services.elasticsearch = { status: "connected", cluster: esHealth.status };
+    const admin = kafka.admin();
+    await admin.connect();
+    await admin.disconnect();
+    health.services.kafka = { status: "connected" };
   } catch (error) {
-    health.services.elasticsearch = { status: "error", error: error.message };
+    health.services.kafka = { status: "error", error: error.message };
   }
+
 
   // Check Redis 1
   try {
@@ -37,13 +29,6 @@ router.get("/", async (req, res) => {
     health.services.redis = { status: "error", error: error.message };
   }
 
-  // Check Redis 2
-  try {
-    await redis2Client.ping();
-    health.services.redis2 = { status: "connected" };
-  } catch (error) {
-    health.services.redis2 = { status: "error", error: error.message };
-  }
 
   // Check PostgreSQL
   try {

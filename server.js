@@ -4,8 +4,6 @@ process.env.TZ = "Asia/Tehran";
 // Load environment variables FIRST
 import "dotenv/config";
 
-// Initialize Sentry BEFORE importing app
-import "./sentry.js";
 
 // import { createRequire } from "module";
 // const require = createRequire(import.meta.url);
@@ -22,8 +20,6 @@ import {
   producer,
   consumer,
   redisClient,
-  redis2Client,
-  elasticsearchClient,
 } from "./services/index.js";
 import sequelize from "./config/database.js";
 
@@ -44,17 +40,12 @@ async function initializeConnections() {
     await redisClient.connect();
     console.log("✅ Redis 1 connected");
 
-    await redis2Client.connect();
-    console.log("✅ Redis 2 connected");
 
     // Test PostgreSQL connection
     await sequelize.authenticate({});
     await sequelize.sync({ alter: true });
     console.log("✅ PostgreSQL connected via Sequelize");
 
-    // Test Elasticsearch connection
-    const esHealth = await elasticsearchClient.cluster.health();
-    console.log("✅ Elasticsearch connected:", esHealth.status);
 
     console.log("🚀 All services connected successfully!");
   } catch (error) {
@@ -75,7 +66,6 @@ process.on("SIGTERM", async () => {
   await producer.disconnect();
   await consumer.disconnect();
   await redisClient.quit();
-  await redis2Client.quit();
   await sequelize.close();
   process.exit(0);
 });
@@ -85,7 +75,6 @@ process.on("SIGINT", async () => {
   await producer.disconnect();
   await consumer.disconnect();
   await redisClient.quit();
-  await redis2Client.quit();
   await sequelize.close();
   process.exit(0);
 });
